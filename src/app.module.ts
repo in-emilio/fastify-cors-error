@@ -1,10 +1,17 @@
-import { Module } from '@nestjs/common';
+import { Module, Global, MiddlewareConsumer } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { RequestContextMiddleware } from './context/RequestContext.middleware';
 
+@Global()
 @Module({
   imports: [],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [],
 })
-export class AppModule {}
+export class AppModule {
+
+  public configure(consumer: MiddlewareConsumer): any {
+    consumer.apply(RequestContextMiddleware).forRoutes('*');
+  }
+
+}
